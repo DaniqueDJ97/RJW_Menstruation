@@ -238,7 +238,7 @@
     </thingCategories>
     <apparel>
       <careIfWornByCorpse>true</careIfWornByCorpse>
-      <countsAsClothingForNudity>true</countsAsClothingForNudity>
+      <countsAsClothingForNudity>false</countsAsClothingForNudity>
       <careIfDamaged>false</careIfDamaged>
       <wearPerDay>0</wearPerDay>
       <gender>Female</gender>

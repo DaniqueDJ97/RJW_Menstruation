@@ -13,7 +13,7 @@ namespace RJW_Menstruation.Sexperience
 {
     public class JobDriver_VaginaWashingWithBucket : JobDriver_CleanSelfWithBucket
     {
-        const int excretingTime = 300;//ticks - 120 = 2 real seconds, 3 in-game minutes
+        const int excretingTime = 60;//ticks - 120 = 2 real seconds, 3 in-game minutes
 
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
