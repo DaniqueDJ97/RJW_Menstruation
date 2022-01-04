@@ -37,6 +37,7 @@ namespace RJW_Menstruation
         public static int CumFertilityDecayRatioAdjust = CumFertilityDecayRatioAdjustDefault;
         public static int CycleAcceleration = CycleAccelerationDefault;
         public static bool EnableWombIcon = true;
+        public static bool EnableCreampieMessages = true;
         public static bool EnableAnimalCycle = false;
         public static bool DrawWombStatus = true;
         public static bool DrawVaginaStatus = true;
@@ -350,6 +351,8 @@ namespace RJW_Menstruation
 
                 listmain.EndSection(wombsection);
             }
+
+            listmain.CheckboxLabeled("Enable creampie messages", ref Configurations.EnableCreampieMessages);
 
             listmain.CheckboxLabeled(Translations.Option2_Label, ref Configurations.EnableAnimalCycle, Translations.Option2_Desc);
 

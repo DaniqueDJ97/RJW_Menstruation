@@ -3,15 +3,15 @@
 <Defs>
 	<RecordDef>
 		<defName>AmountofCreampied</defName>
-		<label>creampied</label>
-		<description>The amount of cums I have been creampied.</description>
+		<label>creampied volume</label>
+		<description>The mL of cum I have been creampied with</description>
 		<type>Float</type>
 	</RecordDef>
 
 	<RecordDef>
 		<defName>AmountofFertilizedEggs</defName>
-		<label>fertilized eggs</label>
-		<description>The amount of my eggs being raped by sperm.</description>
+		<label>fertilizations</label>
+		<description>Times impregnated</description>
 		<type>Int</type>
 	</RecordDef>
 	

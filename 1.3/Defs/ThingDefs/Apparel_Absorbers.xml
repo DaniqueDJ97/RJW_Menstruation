@@ -45,7 +45,8 @@
       <li>ApparelUtility</li>
     </thingCategories>
     <apparel>
-      <careIfWornByCorpse>true</careIfWornByCorpse>
+	  <countsAsClothingForNudity>false</countsAsClothingForNudity>
+      <careIfWornByCorpse>false</careIfWornByCorpse>
       <careIfDamaged>false</careIfDamaged>
       <wearPerDay>0</wearPerDay>
 	  <gender>Female</gender>
@@ -98,6 +99,7 @@
       <li>ApparelUtility</li>
     </thingCategories>
     <apparel>
+	  <countsAsClothingForNudity>false</countsAsClothingForNudity>
       <careIfWornByCorpse>true</careIfWornByCorpse>
       <careIfDamaged>false</careIfDamaged>
       <wearPerDay>0</wearPerDay>
@@ -166,6 +168,7 @@
       <li>ApparelUtility</li>
     </thingCategories>
     <apparel>
+	  <countsAsClothingForNudity>false</countsAsClothingForNudity>
       <careIfWornByCorpse>true</careIfWornByCorpse>
       <careIfDamaged>false</careIfDamaged>
       <wearPerDay>0</wearPerDay>
@@ -218,6 +221,7 @@
       <li>ApparelUtility</li>
     </thingCategories>
     <apparel>
+	  <countsAsClothingForNudity>false</countsAsClothingForNudity>
       <careIfWornByCorpse>true</careIfWornByCorpse>
       <careIfDamaged>false</careIfDamaged>
       <wearPerDay>0</wearPerDay>

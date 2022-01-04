@@ -184,7 +184,7 @@ namespace RJW_Menstruation
             get
             {
                 float res = Props.maxCumCapacity * parent.pawn.BodySize;
-                if (curStage != Stage.Pregnant) res *= 500f;
+                if (curStage != Stage.Pregnant) res *= 2500f; // originally 500
                 return res;
             }
         }
@@ -192,8 +192,8 @@ namespace RJW_Menstruation
         {
             get
             {
-                float res = 1.0f;
-                if (parent.pawn.health.hediffSet.HasHediff(VariousDefOf.RJW_IUD)) res = 0.01f;
+                float res = 5.0f;
+                if (parent.pawn.health.hediffSet.HasHediff(VariousDefOf.RJW_IUD)) res = 0.005f;
                 return res;
             }
         }
@@ -664,7 +664,11 @@ namespace RJW_Menstruation
         protected virtual void AfterCumIn(Pawn cummer)
         {
             ThoughtCumInside(cummer);
-
+            
+            if (Configurations.EnableCreampieMessages)
+            {
+                Messages.Message($"{cummer.Name} came inside {parent.pawn.Name}", parent.pawn, MessageTypeDefOf.NeutralEvent);
+            }
         }
 
         protected virtual void AfterNotCumIn()

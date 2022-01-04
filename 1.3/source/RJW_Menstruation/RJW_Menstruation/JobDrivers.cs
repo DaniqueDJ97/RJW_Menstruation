@@ -7,7 +7,7 @@ namespace RJW_Menstruation
 {
     public class JobDriver_VaginaWashing : JobDriver
     {
-        const int excretingTime = 300;//ticks - 120 = 2 real seconds, 3 in-game minutes
+        const int excretingTime = 60;//ticks - 120 = 2 real seconds, 3 in-game minutes
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -30,7 +30,7 @@ namespace RJW_Menstruation
             {
                 initAction = delegate ()
                 {
-                    Comp.CumOut(null, 0.5f);
+                    Comp.CumOut(null, 0.8f);
                     if (Comp.TotalCumPercent > 0.001) JumpToToil(excreting);
                 }
             };

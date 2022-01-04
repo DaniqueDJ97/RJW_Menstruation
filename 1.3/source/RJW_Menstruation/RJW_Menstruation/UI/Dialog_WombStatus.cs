@@ -253,7 +253,7 @@ namespace RJW_Menstruation
 
             //Widgets.Label(wombInfoRect,Translations.Dialog_WombInfo01 + ": " + comp.GetCurStageLabel);
 
-            Rect cumlistTitle, cumlistRect;
+            Rect cumlistTitle, cumlistSize, cumlistRect;
             if (Configurations.DrawVaginaStatus && !pawn.IsAnimal())
             {
                 Rect genitalRect = new Rect(pawnRectWidth + 24, pawnRectHeight + 2 * fontheight, genitalRectWidth, genitalRectHeight + fontheight * 2);
@@ -261,12 +261,14 @@ namespace RJW_Menstruation
                 DrawVagina(genitalRect, comp);
                 DrawBreast(breastRect);
                 cumlistTitle = new Rect(wombRectWidth + 4f, 0, 150f, fontheight);
-                cumlistRect = new Rect(wombRectWidth + 4f, fontheight, 150f, mainRect.yMax - fontheight + preginfoheight + 3);
+                cumlistSize = new Rect(wombRectWidth + 4f, fontheight, 150f, fontheight);
+                cumlistRect = new Rect(wombRectWidth + 4f, fontheight * 2, 150f, mainRect.yMax - fontheight * 2 + preginfoheight + 3);
             }
             else
             {
                 cumlistTitle = new Rect(pawnRectWidth, 0, 150f, fontheight);
-                cumlistRect = new Rect(pawnRectWidth, fontheight, 150f, mainRect.yMax - wombRectHeight - fontheight);
+                cumlistSize = new Rect(pawnRectWidth, fontheight, 150f, fontheight);
+                cumlistRect = new Rect(pawnRectWidth, fontheight * 2, 150f, mainRect.yMax - wombRectHeight - fontheight);
             }
 
             Rect infoRect = new Rect(0, pawnRectHeight + 2*fontheight, pawnRectWidth, pawnRect.yMax + 2*fontheight - wombInfoRect.y);
@@ -275,6 +277,7 @@ namespace RJW_Menstruation
 
 
             GUI.Label(cumlistTitle, Translations.Dialog_WombInfo04);
+            GUI.Label(cumlistSize, comp.TotalCum.ToString("0.00") + " mL (" + comp.TotalCumPercent.ToString("0") + "%)");
             DrawCumlist(cumlistRect);
 
 

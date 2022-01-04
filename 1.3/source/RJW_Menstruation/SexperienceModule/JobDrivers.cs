@@ -13,7 +13,7 @@ namespace RJW_Menstruation.Sexperience
 {
     public class JobDriver_VaginaWashingWithBucket : JobDriver
     {
-        const int excretingTime = 300;//ticks - 120 = 2 real seconds, 3 in-game minutes
+        const int excretingTime = 60;//ticks - 120 = 2 real seconds, 3 in-game minutes
 
         protected Building_CumBucket Bucket => TargetB.Thing as Building_CumBucket;
 
@@ -39,7 +39,7 @@ namespace RJW_Menstruation.Sexperience
             {
                 initAction = delegate ()
                 {
-                    CumMixture mixture = Comp.MixtureOut(RJWSexperience.VariousDefOf.GatheredCum, 0.5f);
+                    CumMixture mixture = Comp.MixtureOut(RJWSexperience.VariousDefOf.GatheredCum, 0.75f);
                     float amount = mixture.Volume;
                     if (mixture.ispurecum)
                     {
