@@ -73,7 +73,7 @@ namespace RJW_Menstruation
         public bool loaded = false;
         public int ovarypower = -100000;
         public int eggstack = 0;
-
+        public bool DoCleanWomb = false;
 
         public enum Stage
         {
@@ -121,7 +121,6 @@ namespace RJW_Menstruation
         protected HediffComp_Breast breastcache = null;
         protected float antisperm = 0.0f;
         protected float? originvagsize = null;
-        protected bool? hymen = null;
 
         public int ovarypowerthreshold
         {
@@ -507,7 +506,7 @@ namespace RJW_Menstruation
             Scribe_Values.Look(ref eggstack, "eggstack", eggstack, true);
             Scribe_Values.Look(ref estrusflag, "estrusflag", estrusflag, true);
             Scribe_Values.Look(ref originvagsize, "originvagsize", originvagsize, true);
-            Scribe_Values.Look(ref hymen, "hymen", hymen, true);
+            Scribe_Values.Look(ref DoCleanWomb, "DoCleanWomb", DoCleanWomb, true);
         }
 
 
@@ -530,9 +529,16 @@ namespace RJW_Menstruation
 
         public override void CompPostPostRemoved()
         {
-            HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(actionref);
-            Log.Message(parent.pawn.Label + "tick scheduler removed");
-            base.CompPostPostRemoved();
+            if (parent?.pawn?.GetMenstruationComp() == this)
+            {
+                Log.Warning("Something tried to remove hediff with wrong way.");
+            }
+            else
+            {
+                HugsLibController.Instance.TickDelayScheduler.TryUnscheduleCallback(actionref);
+                Log.Message(parent.pawn.Label + "tick scheduler removed");
+                base.CompPostPostRemoved();
+            }
         }
 
 
@@ -764,7 +770,7 @@ namespace RJW_Menstruation
         /// </summary>
         /// <param name="targetcum"></param>
         /// <param name="portion"></param>
-        /// <returns></returns>
+        /// <returns>Amount of target cum</returns>
         public float CumOut(Cum targetcum, float portion = 0.1f)
         {
             if (cums.NullOrEmpty()) return 0;
@@ -874,12 +880,21 @@ namespace RJW_Menstruation
 
                 InitOvary(parent.pawn.ageTracker.AgeBiologicalYears);
 
-                if (parent.pawn.IsPregnant())
+                Hediff_BasePregnancy pregnancy = parent.pawn.GetRJWPregnancy();
+                if (pregnancy != null)
                 {
-                    Hediff_BasePregnancy hediff = (Hediff_BasePregnancy)PregnancyHelper.GetPregnancy(parent.pawn);
-                    currentIntervalhours = (int)(hediff?.GestationHours());
-                    curStage = Stage.Pregnant;
+                    Hediff hediff = PregnancyHelper.GetPregnancy(parent.pawn);
+                    if (hediff != null)
+                    {
+                        if (hediff is Hediff_BasePregnancy)
+                        {
+                            Hediff_BasePregnancy preg = (Hediff_BasePregnancy)hediff;
+                            currentIntervalhours = (int)(preg.GestationHours());
+                            curStage = Stage.Pregnant;
+                        }
+                    }
                 }
+
                 if (parent.pawn.IsAnimal())
                 {
                     if (Configurations.EnableAnimalCycle)
@@ -889,7 +904,7 @@ namespace RJW_Menstruation
                 }
                 else
                 {
-                    if (!parent.pawn.IsPregnant() && parent.pawn.health.capacities.GetLevel(xxx.reproduction) <= 0) HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(PeriodSimulator(Stage.Young), tickInterval, parent.pawn, false);
+                    if (pregnancy == null && parent.pawn.health.capacities.GetLevel(xxx.reproduction) <= 0) HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(PeriodSimulator(Stage.Young), tickInterval, parent.pawn, false);
                     else HugsLibController.Instance.TickDelayScheduler.ScheduleCallback(PeriodSimulator(curStage), tickInterval, parent.pawn, false);
                 }
             }
@@ -1049,7 +1064,28 @@ namespace RJW_Menstruation
                     if (!egg.fertilized || egg.fertstage < 168) continue;
                     else if (Rand.Range(0.0f, 1.0f) <= Configurations.ImplantationChance * Props.baseImplantationChanceFactor * ImplantFactor * InterspeciesImplantFactor(egg.fertilizer))
                     {
-                        if (!parent.pawn.IsPregnant())
+                        Hediff_BasePregnancy pregnancy = parent.pawn.GetRJWPregnancy();
+                        if (pregnancy != null)
+                        {
+                            if (Configurations.UseMultiplePregnancy && Configurations.EnableHeteroOvularTwins)
+                            {
+                                if (pregnancy is Hediff_MultiplePregnancy)
+                                {
+                                    Hediff_MultiplePregnancy h = (Hediff_MultiplePregnancy)pregnancy;
+                                    h.AddNewBaby(parent.pawn, egg.fertilizer);
+                                }
+                                pregnant = true;
+                                deadeggs.Add(egg);
+                            }
+                            else
+                            {
+                                pregnant = true;
+                                break;
+                            }
+
+
+                        }
+                        else
                         {
                             if (!Configurations.UseMultiplePregnancy)
                             {
@@ -1069,22 +1105,7 @@ namespace RJW_Menstruation
                                 deadeggs.Add(egg);
                             }
                         }
-                        else if (Configurations.UseMultiplePregnancy && Configurations.EnableHeteroOvularTwins)
-                        {
-                            Hediff hediff = PregnancyHelper.GetPregnancy(parent.pawn);
-                            if (hediff is Hediff_MultiplePregnancy)
-                            {
-                                Hediff_MultiplePregnancy h = (Hediff_MultiplePregnancy)hediff;
-                                h.AddNewBaby(parent.pawn, egg.fertilizer);
-                            }
-                            pregnant = true;
-                            deadeggs.Add(egg);
-                        }
-                        else
-                        {
-                            pregnant = true;
-                            break;
-                        }
+
                     }
                     else deadeggs.Add(egg);
                 }
@@ -1347,7 +1368,7 @@ namespace RJW_Menstruation
                 Implant();
             }
 
-            if (parent.pawn.IsPregnant())
+            if (parent.pawn.GetRJWPregnancy() != null)
             {
                 curStageHrs += 1;
                 StayCurrentStageConst(Stage.Pregnant);
